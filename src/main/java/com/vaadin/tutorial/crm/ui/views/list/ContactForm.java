@@ -13,9 +13,12 @@ import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.value.HasValueChangeMode;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.tutorial.crm.backend.entity.Company;
 import com.vaadin.tutorial.crm.backend.entity.Contact;
+import java.util.Arrays;
 
 import java.util.List;
 
@@ -37,6 +40,14 @@ public class ContactForm extends FormLayout {
         addClassName("contact-form");
 
         binder.bindInstanceFields(this);
+        
+        // make text fields function properly, so that save button activates when
+        // validation passess, this should be the default
+        Arrays.asList(firstName, lastName, email).forEach( f -> {
+            ((HasValueChangeMode) f).setValueChangeMode(ValueChangeMode.LAZY);
+        });
+        
+        
         status.setItems(Contact.Status.values());
         company.setItems(companies);
         company.setItemLabelGenerator(Company::getName);
